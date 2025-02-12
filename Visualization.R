@@ -140,4 +140,38 @@ murders %>% ggplot(aes(population, total, label = abb)) +
   scale_y_log10() +
   theme_excel_new()
 
+##.........................................##
+##VISUALIZING DATA DISTRIBUTION##
+#...........................................##
+
+#ordinal data is variables belonging to small number of different groups, with each groups having many members
+##CASE STUDY
+##Student Heights
+
+library(tidyverse)
+library(dslabs)
+data(heights)
+
+str(heights)
+
+heights %>%
+  ggplot(aes(height)) +
+  geom_histogram(binwidth = 1,color = "white", fill = "orange") +
+  facet_grid(sex ~ .)
+
+hist(heights$height)
+
+
+#THE NORMAL DISTRIBUTION
+#if we have a vector X
+#then the avarage of x will be mean(x)
+#and the standard deviation will be sd(x)
+
+#if the data is normally distributed then we can measure the data in standard units
+#z = (x - m)/s with m is the mean and s is the standard deviation
+
+##........................###
+## QUANTILE QUANTILE PLOTS#
+##.........................###
+
 

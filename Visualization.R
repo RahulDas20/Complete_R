@@ -101,3 +101,14 @@ murders %>%
   ggtitle("US Gun Murders in 2010") +
   scale_color_discrete(name = "Region") +
   theme_economist()
+
+
+#Quick plots with qpolt
+data("murders")
+x <- log10(murders$population)
+y <- murders$total
+
+qplot(x,y)
+
+
+#How can we make a grid of plots

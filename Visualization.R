@@ -112,3 +112,32 @@ qplot(x,y)
 
 
 #How can we make a grid of plots
+library(gridExtra)
+p1 <- qplot(x)
+p2 <- qplot(x,y)
+grid.arrange(p1,p2, nrow =2)
+
+
+##Exercises
+library(dplyr)
+library(ggplot2)
+library(dslabs)
+data("heights")
+data("murders")
+
+
+p <- ggplot(murders)
+
+q <- ggplot(heights)
+
+murders %>% ggplot(aes(population, total)) +
+  geom_point()
+
+murders %>% ggplot(aes(population, total, label = abb)) +
+  geom_point(aes(col = region), size = 1.5) +
+  geom_text_repel() +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_excel_new()
+
+

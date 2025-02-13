@@ -257,3 +257,73 @@ heights %>% filter(sex == "Male") %>%
   geom_abline()
 
 
+###EXERCISES####
+#Define variables containing heights
+
+library(dslabs)
+library(tidyverse)
+male <- heights$height[heights$sex == "Male"]
+female <- heights$height[heights$sex == "Female"]
+
+p <- seq(.10,.90,0.10)
+
+#let's create the male percentile
+male_percentile <- quantile(male, p)
+male_percentile
+
+#let's create the female percentile
+female_percentile <- quantile(female, p)
+
+#lets create the data frame
+heights_data <- data.frame(male_percentile,female_percentile)
+heights_data
+
+
+
+library(dslabs)
+data("heights")
+
+x <- heights$height[heights$sex == "Male"]
+
+mean(x > 69 & x <= 72)
+
+avg <- mean(x)
+sd <- sd(x)
+
+prop2 <- pnorm(72, avg, sd)
+prop2
+
+
+prop1 <- pnorm(69,avg, sd)
+prop1
+
+prop2 - prop1
+
+
+#sometimes we have a table which we want to show as a boxplot
+data("murders")
+
+tab <- murders %>%
+  count(region) %>%
+  mutate(proportion = n/sum(n))
+
+
+#we use stat indentity when we want to show the actual data in the barplot, not the proportion
+tab %>% ggplot(aes(region,proportion)) + geom_bar(stat = "identity")
+#we no longer want geom_bar to count but rather plot the height data provided by the proportion variable
+
+tab %>% ggplot(aes(region,proportion)) + 
+  geom_bar(stat = "identity")
+
+
+
+###HISTOGRAMS###
+heights %>%
+  filter(sex == "Female") %>%
+  ggplot(aes(height)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "orange") +
+  xlab("Female height in inches") +
+  ggtitle("Histogram")
+
+
+#histograms are easy

@@ -327,3 +327,42 @@ heights %>%
 
 
 #histograms are easy
+heights %>%
+  filter(sex == "Female") %>%
+  ggplot(aes(height)) +
+  geom_density(fill = "orange")
+
+#qqplots for different variables
+params <- heights %>% filter(sex == "Male") %>%
+  summarize(mean = mean(height), sd = sd(height))
+
+##Normally the qq plot uses the sample parameter with mean 0 and sd 1
+##when we use dparams then qq plot uses our actual variables
+heights %>% filter(sex == "Male") %>%
+  ggplot(aes(sample =  height)) +
+  geom_qq(dparams = params) +
+  geom_abline()
+
+#we can do this with another method
+heights %>%
+  filter(sex=="Male") %>%
+  ggplot(aes(sample = scale(height))) +
+  geom_qq() +
+  geom_abline()
+
+
+#to make a quick qq plot we have to use the sample function
+qplot(sample = scale(x)) + geom_abline()
+
+
+heights %>% qplot(sex, height, data = ., geom="boxplot")
+
+qplot(x, geom = "density")
+
+heights %>%
+  ggplot(aes(height,col = sex)) +
+  geom_density()
+
+
+
+

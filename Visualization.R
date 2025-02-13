@@ -175,3 +175,85 @@ hist(heights$height)
 ##.........................###
 
 
+index <- heights$sex == "Male"
+x <- heights$height[index]
+
+x
+
+qnorm(0.975, mean = 5, sd = 2)
+
+mean(x <= 69.5)
+
+## Let's construct a qq plot with R code
+p <- seq(0.05, 0.95, 0.05)
+
+sample_quantiles <- quantile(x, p)
+
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+
+theoretical_quantiles
+
+qplot(theoretical_quantiles,sample_quantiles) +
+  geom_abline()
+
+
+z <- scale(x)
+
+sample_quantiles <- quantile(z,p)
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+
+qplot(theoretical_quantiles,sample_quantiles) +
+  geom_abline()
+
+heights %>% filter(sex == "Male") %>%
+  ggplot(aes(sample = scale(height))) +
+  geom_qq() +
+  geom_abline()
+
+
+
+## We are going to do the qq ploting again
+p <- seq(0.05, 0.95, 0.05)
+
+
+#to obtain sample quantile from the data, we can use the quantile function
+sample_quantiles <- quantile(x,p)
+
+#now let's define theoretical quantile
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+sample_quantiles
+
+#now plot these points
+qplot(theoretical_quantiles, sample_quantiles) + geom_abline()
+
+
+
+## now let's do these with z score
+z <- scale(x)
+
+
+#lets define sample quantile from z scores
+sample_quantiles <- quantile(z, p)
+sample_quantiles
+
+
+#lets determine the theoretical quantile
+theoretical_quantiles <- qnorm(p, mean = mean(z), sd = sd(z))
+
+#let's plot these data
+qplot(theoretical_quantiles,sample_quantiles) + geom_abline()
+
+
+
+#now we understand how the qq plots work in the normal distribution
+#we can inspect any data with these qqplot function
+
+
+#the qq aesthetics should have the sample parameter in the ggplot aesthetics
+
+heights %>% filter(sex == "Male") %>%
+  ggplot(aes(sample = scale(height))) +
+  geom_qq() +
+  geom_abline()
+
+

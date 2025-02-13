@@ -140,4 +140,190 @@ murders %>% ggplot(aes(population, total, label = abb)) +
   scale_y_log10() +
   theme_excel_new()
 
+##.........................................##
+##VISUALIZING DATA DISTRIBUTION##
+#...........................................##
 
+#ordinal data is variables belonging to small number of different groups, with each groups having many members
+##CASE STUDY
+##Student Heights
+
+library(tidyverse)
+library(dslabs)
+data(heights)
+
+str(heights)
+
+heights %>%
+  ggplot(aes(height)) +
+  geom_histogram(binwidth = 1,color = "white", fill = "orange") +
+  facet_grid(sex ~ .)
+
+hist(heights$height)
+
+
+#THE NORMAL DISTRIBUTION
+#if we have a vector X
+#then the avarage of x will be mean(x)
+#and the standard deviation will be sd(x)
+
+#if the data is normally distributed then we can measure the data in standard units
+#z = (x - m)/s with m is the mean and s is the standard deviation
+
+##........................###
+## QUANTILE QUANTILE PLOTS#
+##.........................###
+
+
+index <- heights$sex == "Male"
+x <- heights$height[index]
+
+x
+
+qnorm(0.975, mean = 5, sd = 2)
+
+mean(x <= 69.5)
+
+## Let's construct a qq plot with R code
+p <- seq(0.05, 0.95, 0.05)
+
+sample_quantiles <- quantile(x, p)
+
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+
+theoretical_quantiles
+
+qplot(theoretical_quantiles,sample_quantiles) +
+  geom_abline()
+
+
+z <- scale(x)
+
+sample_quantiles <- quantile(z,p)
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+
+qplot(theoretical_quantiles,sample_quantiles) +
+  geom_abline()
+
+heights %>% filter(sex == "Male") %>%
+  ggplot(aes(sample = scale(height))) +
+  geom_qq() +
+  geom_abline()
+
+
+
+## We are going to do the qq ploting again
+p <- seq(0.05, 0.95, 0.05)
+
+
+#to obtain sample quantile from the data, we can use the quantile function
+sample_quantiles <- quantile(x,p)
+
+#now let's define theoretical quantile
+theoretical_quantiles <- qnorm(p, mean = mean(x), sd = sd(x))
+sample_quantiles
+
+#now plot these points
+qplot(theoretical_quantiles, sample_quantiles) + geom_abline()
+
+
+
+## now let's do these with z score
+z <- scale(x)
+
+
+#lets define sample quantile from z scores
+sample_quantiles <- quantile(z, p)
+sample_quantiles
+
+
+#lets determine the theoretical quantile
+theoretical_quantiles <- qnorm(p, mean = mean(z), sd = sd(z))
+
+#let's plot these data
+qplot(theoretical_quantiles,sample_quantiles) + geom_abline()
+
+
+
+#now we understand how the qq plots work in the normal distribution
+#we can inspect any data with these qqplot function
+
+
+#the qq aesthetics should have the sample parameter in the ggplot aesthetics
+
+heights %>% filter(sex == "Male") %>%
+  ggplot(aes(sample = scale(height))) +
+  geom_qq() +
+  geom_abline()
+
+
+###EXERCISES####
+#Define variables containing heights
+
+library(dslabs)
+library(tidyverse)
+male <- heights$height[heights$sex == "Male"]
+female <- heights$height[heights$sex == "Female"]
+
+p <- seq(.10,.90,0.10)
+
+#let's create the male percentile
+male_percentile <- quantile(male, p)
+male_percentile
+
+#let's create the female percentile
+female_percentile <- quantile(female, p)
+
+#lets create the data frame
+heights_data <- data.frame(male_percentile,female_percentile)
+heights_data
+
+
+
+library(dslabs)
+data("heights")
+
+x <- heights$height[heights$sex == "Male"]
+
+mean(x > 69 & x <= 72)
+
+avg <- mean(x)
+sd <- sd(x)
+
+prop2 <- pnorm(72, avg, sd)
+prop2
+
+
+prop1 <- pnorm(69,avg, sd)
+prop1
+
+prop2 - prop1
+
+
+#sometimes we have a table which we want to show as a boxplot
+data("murders")
+
+tab <- murders %>%
+  count(region) %>%
+  mutate(proportion = n/sum(n))
+
+
+#we use stat indentity when we want to show the actual data in the barplot, not the proportion
+tab %>% ggplot(aes(region,proportion)) + geom_bar(stat = "identity")
+#we no longer want geom_bar to count but rather plot the height data provided by the proportion variable
+
+tab %>% ggplot(aes(region,proportion)) + 
+  geom_bar(stat = "identity")
+
+
+
+###HISTOGRAMS###
+heights %>%
+  filter(sex == "Female") %>%
+  ggplot(aes(height)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "orange") +
+  xlab("Female height in inches") +
+  ggtitle("Histogram")
+
+
+#histograms are easy

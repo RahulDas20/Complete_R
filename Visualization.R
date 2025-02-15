@@ -364,5 +364,3 @@ heights %>%
   geom_density()
 
 
-
-
